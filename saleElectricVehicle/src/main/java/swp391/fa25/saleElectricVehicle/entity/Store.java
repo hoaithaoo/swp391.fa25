@@ -46,6 +46,6 @@ public class Store {
 //    }
     private String contractStartDate;
     private String contractEndDate;
-    private String createdA;
+    private String createdAt;
     private String updatedAt;
 }
