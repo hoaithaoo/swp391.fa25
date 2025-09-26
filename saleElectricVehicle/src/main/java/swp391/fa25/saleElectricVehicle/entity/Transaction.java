@@ -4,13 +4,19 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transaction")
-
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Transaction {
     @Id
     @Column(name = "transaction_id", columnDefinition = "CHAR(6)", nullable = false)

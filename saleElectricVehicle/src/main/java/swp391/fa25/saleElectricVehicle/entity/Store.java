@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "stores")
@@ -22,30 +26,40 @@ public class Store {
     @NotBlank(message = "Address không được để trống")
     private String address;
 
-    @Column(name = "phone")
+    @Column(name = "phone", columnDefinition = "CHAR(10)", nullable = false)
     @Pattern(regexp = "^0\\d{9}$", message = "Phone không hợp lệ")
     @NotBlank(message = "Phone không được để trống")
     private String phone;
 
-    @Column(name = "province_name", columnDefinition = "NVARCHAR(255)", nullable = false)
+    @Column(name = "province_name", nullable = false)
     @NotBlank(message = "Province name không được để trống")
     private String provinceName;
 
-    @Column(name = "owner_name", columnDefinition = "NVARCHAR(255)", nullable = false)
+    @Column(name = "owner_name", nullable = false)
     @NotBlank(message = "Owner name không được để trống")
     private String ownerName;
 
-//    @Column(name = "status", nullable = false)
-//    @Enumerated(EnumType.STRING)
-//    private StoreStatus status = StoreStatus.ACTIVE;
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private StoreStatus status = StoreStatus.ACTIVE;
 
-//    public enum StoreStatus {
-//        ACTIVE("active"),
-//        INACTIVE("inactive");
-//
-//    }
-    private String contractStartDate;
-    private String contractEndDate;
-    private String createdAt;
-    private String updatedAt;
+    public enum StoreStatus {
+        ACTIVE,
+        INACTIVE;
+
+    }
+
+    @Column(name = "contract_start_date", nullable = false)
+    private LocalDateTime contractStartDate;
+
+    @Column(name = "contract_end_date", nullable = false)
+    private LocalDateTime contractEndDate;
+
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }

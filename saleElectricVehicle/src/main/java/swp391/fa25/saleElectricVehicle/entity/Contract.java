@@ -4,6 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,23 +18,26 @@ import java.util.List;
 
 @Entity
 @Table(name = "contracts")
-
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Contract {
     @Id
-    @Column(name = "contract_id", columnDefinition = "CHAR(6)", nullable = false)
-    @Size(min = 6, max = 6, message = "Contract ID phải đúng 6 ký tự")
+    @Column(name = "contract_id", columnDefinition = "CHAR(10)", nullable = false)
+    @Size(min = 10, max = 10, message = "Contract ID phải đúng 10 ký tự (CT2025-001)")
     private String contractId;
 
     @Column(name = "contract_date", columnDefinition = "DATE", nullable = false)
     @NotNull(message = "Contract date không được để trống")
     private LocalDate contractDate;
 
-    @Column(name = "contract_file_url", columnDefinition = "NVARCHAR(255)", nullable = false)
+    @Column(name = "contract_file_url", nullable = false)
     @NotBlank(message = "Contract file URL không được để trống")
     private String contractFileUrl;
 
     public enum ContractStatus {
-        UPLOADED, PENDING, COMPLETED
+        DRAFT, PENDING, COMPLETED, CANCELLED, EXPIRED
     }
 
     @Column(name = "status", nullable = false)
@@ -53,12 +62,17 @@ public class Contract {
     @NotBlank(message = "Uploaded by không được để trống")
     private String uploadedBy;
 
+    @CreationTimestamp
+    @Column(name = "created_at",nullable = false, updatable = false)
     private String createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
     private String updatedAt;
 
     //Dùng để truy vấn tất cả Payment (nếu cần)
-    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Payment> payments = new ArrayList<>();
+//    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Payment> payments = new ArrayList<>();
 
 
 

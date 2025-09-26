@@ -4,14 +4,23 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "payment")
-
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Payment {
     @Id
     @Column(name = "payment_id", columnDefinition = "CHAR(6)", nullable = false)
@@ -31,9 +40,9 @@ public class Payment {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private PaymentStatus status;
+    private PaymentStatus status = PaymentStatus.PENDING;
 
-    @Column(name = "payment_method", columnDefinition = "NVARCHAR(50)", nullable = false)
+    @Column(name = "payment_method", nullable = false)
     @NotBlank(message = "Payment method không được để trống")
     private String paymentMethod;
 
@@ -41,21 +50,14 @@ public class Payment {
     @NotNull(message = "Amount không được để trống")
     private BigDecimal amount;
 
-    private String createdAt;
-    private String updatedAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-    //Dùng để truy vấn tất cả Transaction (nếu cần)
-    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transaction> transactions = new ArrayList<>();
-
-
-
-
-
-
-
-
-
-
-
 }
