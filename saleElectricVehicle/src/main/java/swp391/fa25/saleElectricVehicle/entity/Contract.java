@@ -25,7 +25,7 @@ public class Contract {
     @Column(nullable = false)
     private LocalDate contractDate;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String contractFileUrl;
 
     public enum ContractStatus {

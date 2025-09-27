@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -57,11 +58,11 @@ public class Model {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "model", cascade = CascadeType.ALL, orphanRemoval = true)
-    private StoreStock storeStocks;
+    private List<StoreStock> storeStocks = new java.util.ArrayList<>();
 
     @OneToMany(mappedBy = "model", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Promotion promotion;
+    private List<Promotion> promotions = new java.util.ArrayList<>();
 
     @OneToMany(mappedBy = "model", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Appointment appointment;
+    private List<Appointment> appointments = new java.util.ArrayList<>();
 }

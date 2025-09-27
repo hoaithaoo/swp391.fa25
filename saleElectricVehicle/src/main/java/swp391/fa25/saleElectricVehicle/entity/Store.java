@@ -56,7 +56,7 @@ public class Store {
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private java.util.List<Appointment> appointments = new java.util.ArrayList<>();
 
-    @OneToOne(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "store", cascade = CascadeType.ALL)
     private TestDriveConfig testDriveConfig;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -66,5 +66,5 @@ public class Store {
     private List<StoreStock> storeStocks = new java.util.ArrayList<>();
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<SalesTarget> salesTargets = new java.util.ArrayList<>();
+    private List<SaleTarget> saleTargets = new java.util.ArrayList<>();
 }

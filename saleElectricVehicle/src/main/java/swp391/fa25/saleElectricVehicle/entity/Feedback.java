@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "feedbacks")
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Feedback {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int feedbackId;
 
     @Enumerated(EnumType.STRING)
@@ -46,5 +47,5 @@ public class Feedback {
     private Order order;
 
     @OneToMany(mappedBy = "feedback", cascade = CascadeType.ALL, orphanRemoval = true)
-    private FeebackDetail feebackDetail;
+    private List<FeedbackDetail> feedbackDetails = new java.util.ArrayList<>();
 }

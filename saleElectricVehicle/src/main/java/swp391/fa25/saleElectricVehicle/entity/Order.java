@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -65,5 +66,5 @@ public class Order {
     private Feedback feedback;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private java.util.List<OrderDetail> orderDetails;
+    private List<OrderDetail> orderDetails = new java.util.ArrayList<>();
 }

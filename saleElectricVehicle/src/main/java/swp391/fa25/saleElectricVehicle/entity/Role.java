@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "roles")
 @Getter @Setter
@@ -20,5 +22,5 @@ public class Role {
     private String roleName;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private java.util.List<User> users = new java.util.ArrayList<>();
+    private List<User> users = new java.util.ArrayList<>();
 }

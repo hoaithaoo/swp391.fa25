@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "customers")
 @Getter  @Setter
@@ -24,15 +26,15 @@ public class Customer {
     @Column(nullable = false)
     private String address;
 
-    @Column
+    @Column(unique = true)
     @Email(message = "Email không hợp lệ")
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @Pattern(regexp = "^0\\d{9}$", message = "Phone không hợp lệ")
     private String phone;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @Pattern(regexp = "^\\d{12}$", message = "ID Number phải đúng 12 chữ số")
     private String idNumber;
 
@@ -43,8 +45,8 @@ public class Customer {
     private String updatedAt;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private java.util.List<Order> orders = new java.util.ArrayList<>();
+    private List<Order> orders = new java.util.ArrayList<>();
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Appointment appointment;
+    private List<Appointment> appointments = new java.util.ArrayList<>();
 }
