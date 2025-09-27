@@ -1,65 +1,70 @@
 package swp391.fa25.saleElectricVehicle.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "stores")
 public class Store {
     @Id
-    @Column(name = "store_id", columnDefinition = "CHAR(6)")
-    @Size(min = 6, max = 6, message = "Store ID phải có đúng 6 ký tự")
-    @Pattern(regexp = "^DL\\d{3}$", message = "Store ID phải bắt đầu bằng 'DL' theo sau là 3 chữ số")
-    private String storeId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int storeId;
 
-    @Column(name = "store_name", columnDefinition = "NVARCHAR(255)", nullable = false)
-    @NotBlank(message = "Store name không được để trống")
+    @Column(nullable = false)
     private String storeName;
 
-    @Column(name = "address", columnDefinition = "NVARCHAR(255)", nullable = false)
-    @NotBlank(message = "Address không được để trống")
+    @Column(nullable = false)
     private String address;
 
-    @Column(name = "phone", columnDefinition = "CHAR(10)", nullable = false)
+    @Column(nullable = false)
     @Pattern(regexp = "^0\\d{9}$", message = "Phone không hợp lệ")
-    @NotBlank(message = "Phone không được để trống")
     private String phone;
 
-    @Column(name = "province_name", nullable = false)
-    @NotBlank(message = "Province name không được để trống")
+    @Column(nullable = false)
     private String provinceName;
 
-    @Column(name = "owner_name", nullable = false)
-    @NotBlank(message = "Owner name không được để trống")
+    @Column(nullable = false)
     private String ownerName;
 
-    @Column(name = "status", nullable = false)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private StoreStatus status = StoreStatus.ACTIVE;
 
     public enum StoreStatus {
         ACTIVE,
         INACTIVE;
-
     }
 
-    @Column(name = "contract_start_date", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime contractStartDate;
 
-    @Column(name = "contract_end_date", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime contractEndDate;
 
-    @Column(name = "created_at", updatable = false)
-    @CreationTimestamp
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
-    @UpdateTimestamp
+    @Column
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private java.util.List<User> user;
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private java.util.List<Appointment> appointments = new java.util.ArrayList<>();
+
+    @OneToOne(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private TestDriveConfig testDriveConfig;
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Promotion> promotions = new java.util.ArrayList<>();
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<StoreStock> storeStocks = new java.util.ArrayList<>();
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<SalesTarget> salesTargets = new java.util.ArrayList<>();
 }

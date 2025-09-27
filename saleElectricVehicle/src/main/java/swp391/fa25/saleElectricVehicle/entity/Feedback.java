@@ -1,13 +1,10 @@
 package swp391.fa25.saleElectricVehicle.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedBy;
 
 import java.time.LocalDateTime;
 
@@ -18,38 +15,36 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Feedback {
     @Id
-    @Column(name = "feedback_id", columnDefinition = "CHAR(6)", nullable = false)
-    @Size(min = 6, max = 6, message = "Feedback ID phải đúng 6 ký tự")
-    private String feedbackId;
-
-    @OneToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private int feedbackId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Column
     private FeedbackStatus status;
 
-    @Column(name = "created_at")
-    @CreationTimestamp
+    @Column
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "create_by")
-    @CreatedBy
-    private User createBy;
+    @Column
+    private String createBy;
 
-    @Column(name = "resolve_at")
+    @Column
     private LocalDateTime resolveAt;
 
-    @ManyToOne
-    @JoinColumn(name = "resolve_by")
-    private User resolveBy;
+    @Column
+    private String resolveBy;
 
     public enum FeedbackStatus {
         PENDING,
         IN_PROGRESS,
         RESOLVED,
-        CLOSED
+        REJECTED
     }
+
+    @OneToOne
+    @JoinColumn(name = "ordeId")
+    private Order order;
+
+    @OneToMany(mappedBy = "feedback", cascade = CascadeType.ALL, orphanRemoval = true)
+    private FeebackDetail feebackDetail;
 }

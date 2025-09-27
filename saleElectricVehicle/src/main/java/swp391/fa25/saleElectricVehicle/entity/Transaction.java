@@ -1,9 +1,6 @@
 package swp391.fa25.saleElectricVehicle.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,25 +10,19 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transaction")
+@Table(name = "transactions")
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Transaction {
     @Id
-    @Column(name = "transaction_id", columnDefinition = "CHAR(6)", nullable = false)
-    @Size(min = 6, max = 6, message = "Transaction ID phải đúng 6 ký tự")
-    private String transactionId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int transactionId;
 
-    @ManyToOne
-    @JoinColumn(name = "payment_id", nullable = false)
-    private Payment payment;
-
-    @Column(name = "amount", columnDefinition = "DECIMAL(12,2)", nullable = false)
-    @NotNull(message = "Amount không được để trống")
+    @Column(columnDefinition = "DECIMAL(12,2)", nullable = false)
     private BigDecimal amount;
 
-    @Column(name = "transaction_time", columnDefinition = "TIMESTAMP")
+    @Column(nullable = false)
     private LocalDateTime transactionTime;
 
     public enum TransactionStatus {
@@ -40,26 +31,23 @@ public class Transaction {
         FAILED
     }
 
-    @Column(name = "status", nullable = false)
+    @Column
     @Enumerated(EnumType.STRING)
-    private TransactionStatus status;
+    private TransactionStatus status = TransactionStatus.PENDING;
 
-    @Column(name = "gateway", columnDefinition = "NVARCHAR(50)", nullable = false)
-    @NotBlank(message = "Gateway không được để trống")
+    @Column(nullable = false)
     private String gateway;
 
-    @Column(name = "transaction_ref", columnDefinition = "NVARCHAR(255)")
+    @Column
     private String transactionRef;
 
-    @Column(name = "payer_infor", columnDefinition = "NVARCHAR(255)")
+    @Column
     private String payerInfor;
 
-    @Column(name = "note", columnDefinition = "NVARCHAR(1000)")
+    @Column
     private String note;
 
-
-
-
-
-
+    @ManyToOne
+    @JoinColumn(name = "paymentId", nullable = false)
+    private Payment payment;
 }

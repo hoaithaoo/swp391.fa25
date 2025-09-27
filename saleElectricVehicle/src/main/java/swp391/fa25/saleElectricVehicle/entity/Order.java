@@ -1,12 +1,10 @@
 package swp391.fa25.saleElectricVehicle.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,43 +16,29 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Order {
     @Id
-    @Column(name = "order_id", columnDefinition = "CHAR(6)", nullable = false)
-    @Size(min = 6, max = 6, message = "Order ID phải đúng 6 ký tự")
-    private String orderId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int orderId;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "contract_id")
-    private Contract contract;
-
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
-
-    @ManyToOne
-    @JoinColumn(name = "staff_id")
-    private User user;
-
-    @Column(name = "total_price", precision = 15, scale = 2)
+    @Column(precision = 15, scale = 2, nullable = false)
     private BigDecimal totalPrice;
 
-    @Column(name = "total_tax_price", precision = 15, scale = 2)
+    @Column(precision = 15, scale = 2, nullable = false)
     private BigDecimal totalTaxPrice;
 
-    @Column(name = "total_promotion_amount", precision = 15, scale = 2)
+    @Column(precision = 15, scale = 2)
     private BigDecimal totalPromotionAmount;
 
-    @Column(name = "total_payment", precision = 15, scale = 2)
+    @Column(precision = 15, scale = 2, nullable = false)
     private BigDecimal totalPayment;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Column
     private OrderStatus status = OrderStatus.PENDING;
 
-    @Column(name = "order_date")
+    @Column(nullable = false)
     private LocalDateTime orderDate;
 
-    @Column(name = "updated_at")
-    @UpdateTimestamp
+    @Column
     private LocalDateTime updatedAt;
 
     public enum OrderStatus {
@@ -64,4 +48,22 @@ public class Order {
         DELIVERED,
         CANCELLED
     }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "contract_id", nullable = false)
+    private Contract contract;
+
+    @ManyToOne
+    @JoinColumn(name = "customerId", nullable = false)
+    private Customer customer;
+
+    @ManyToOne
+    @JoinColumn(name = "staff_id", nullable = false)
+    private User user;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Feedback feedback;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<OrderDetail> orderDetails;
 }
